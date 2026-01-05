@@ -56,14 +56,23 @@ const [, forceRender] = useState(0);
   
   const p = smoothProgress.current;
 
-  const SHRINK_END = 0.4;
+  const SHRINK_END = 0.35;
+  const HOLD_END = 0.5; 
+
 
   const shrinkProgress = clamp(p / SHRINK_END, 0, 1);
-  const flipProgress = clamp(
-    (p - SHRINK_END) / (1 - SHRINK_END),
-    0,
-    1
-  );
+
+const holdProgress = clamp(
+  (p - SHRINK_END) / (HOLD_END - SHRINK_END),
+  0,
+  1
+);
+
+const flipProgress = clamp(
+  (p - HOLD_END) / (1 - HOLD_END),
+  0,
+  1
+);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (flipProgress > 0) return;
@@ -83,13 +92,20 @@ const [, forceRender] = useState(0);
 
   const resetTilt = () => setTilt({ x: 0, y: 0 });
 
-  // Phase 1: fullscreen → card
-  const shrinkScale = 1 - shrinkProgress * 0.75;
+const shrinkScale = 1 - shrinkProgress * 0.75;
 
-  // Phase 2: card → flip + grow
-  const flipScale = 0.25 + flipProgress * 3.75;
+const holdScale = 0.25;
 
-  const scale = p < SHRINK_END ? shrinkScale : flipScale;
+const flipScale = 0.25 + flipProgress * 3.75;
+
+let scale = shrinkScale;
+
+if (p >= SHRINK_END && p < HOLD_END) {
+  scale = holdScale; 
+} else if (p >= HOLD_END) {
+  scale = flipScale;
+}
+
 
   const rotateY = flipProgress * 180;
   const radius = 32 - flipProgress * 32;
@@ -102,7 +118,7 @@ const [, forceRender] = useState(0);
 
   return (
     <section ref={sectionRef} className="relative h-[300vh] bg-black">
-      <div className="sticky top-0 h-screen flex items-center justify-center">
+      <div className="sticky top-0 h-screen flex items-center justify-center overflow-hidden">
         <div className="perspective">
           <div
             onMouseMove={handleMouseMove}
@@ -116,9 +132,9 @@ const [, forceRender] = useState(0);
               `,
               borderRadius: `${radius}px`,
             }}
-            className="relative w-screen h-screen
-                       transition-transform duration-100 ease-out
-                       preserve-3d"
+            className="relative w-screen h-screen overflow-hidden
+           transition-transform duration-100 ease-out
+           preserve-3d"
           >
             {/* ---------- FRONT FACE ---------- */}
             <div
@@ -145,10 +161,12 @@ const [, forceRender] = useState(0);
 
             {/* ---------- BACK FACE ---------- */}
             <div
-              style={{ opacity: showBack ? 1 : 0 }}
-              className="absolute inset-0 face-hidden rotate-y-180
-                          flex items-center justify-center"
-            >
+  style={{ opacity: showBack ? 1 : 0 }}
+  className="absolute inset-0 face-hidden rotate-y-180
+             flex items-center justify-center
+             overflow-hidden"
+>
+
               <h2
                 style={{
                   opacity: textOpacity,

@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import SpaceInvadersLoading from '../components/SpaceInvadersLoading';
-import PixelTransition from '@/app/components/PixelTransition';
+import { useState } from "react";
+import SpaceInvadersLoading from "./components/preloader/SpaceInvadersLoading";
+import PixelTransition from "./components/preloader/PixelTransition";
 
 import Gallary from "./components/gallary";
 import ScrollFlipCard from "./components/ScrollFlipCard";
@@ -11,6 +11,10 @@ import Mentors from "./components/Mentors";
 import Timeline from "./components/Timeline";
 import AboutSection from "./components/AboutSection";
 import Navbar from "./components/Navbar";
+import FAQs from "./components/Faq";
+import Footer from "./components/Footer";
+import CommunityPartners from "./components/CommunityPartners";
+import Sponsors from "./components/Sponsors";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -30,17 +34,31 @@ export default function Home() {
 
   return (
     <>
-      <Navbar />
-      <h1 className="text-white">Binary 2k26</h1>
-      <ScrollFlipCard />
-      <section className="h-screen bg-black flex items-center justify-center z-100">
-        <AboutSection />
-      </section>
-      <Timeline />
-      <Tracks />
-      <Gallary />
-      <Mentors />
+      <div className="min-h-screen bg-black text-white relative">
+        <PixelTransition isActive={transitionActive} />
 
+        {isLoading ? (
+          <SpaceInvadersLoading
+            onLoadingComplete={handleLoadingComplete}
+            onTransitionChange={setTransitionActive}
+          />
+        ) : (
+          <>
+            <Navbar />
+            <h1 className="text-white">Binary 2k26</h1>
+            <ScrollFlipCard />
+              <AboutSection />
+            <Tracks />
+            <Mentors />
+            <Timeline />
+            <Gallary />
+            <Sponsors />
+            <CommunityPartners />
+            <FAQs />
+            <Footer />
+          </>
+        )}
+      </div>
     </>
   );
 }
