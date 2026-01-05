@@ -1,9 +1,8 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import SpaceInvadersLoading from '../components/SpaceInvadersLoading';
-import PixelTransition from '@/app/components/PixelTransition';
-
+import { useState } from "react";
+import SpaceInvadersLoading from "../components/SpaceInvadersLoading";
+import PixelTransition from "./components/PixelTransition";
 import Gallary from "./components/gallary";
 import ScrollFlipCard from "./components/ScrollFlipCard";
 import Tracks from "./components/Tracks";
@@ -11,6 +10,7 @@ import Mentors from "./components/Mentors";
 import Timeline from "./components/Timeline";
 import AboutSection from "./components/AboutSection";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -30,44 +30,30 @@ export default function Home() {
 
   return (
     <>
-    <div className="min-h-screen bg-black text-white relative">
-      <PixelTransition isActive={transitionActive} />
+      <div className="min-h-screen bg-black text-white relative">
+        <PixelTransition isActive={transitionActive} />
 
-      {isLoading ? (
-        <SpaceInvadersLoading
-          onLoadingComplete={handleLoadingComplete}
-          onTransitionChange={setTransitionActive}
-        />
-      ) : (
-        <>
-          <Navbar />
-          <h1 className="text-white">Binary 2k26</h1>
-          <ScrollFlipCard />
-          <section className="h-screen bg-black flex items-center justify-center z-100">
-            <AboutSection />
-          </section>
-          <Tracks />
-          <Mentors />
-          <Timeline />
-          <Gallary />
-        </>
-      )}
-    </div>
-
-    <h1 className="text-white">Binary 2k26</h1>
-
-      <ScrollFlipCard />
-
-      <section className="h-screen bg-black flex items-center justify-center z-100">
-        <AboutSection />
-      </section>
-      <Tracks />
-      <Mentors />
-
-      <Timeline />
-
-      <Gallary />
-
+        {isLoading ? (
+          <SpaceInvadersLoading
+            onLoadingComplete={handleLoadingComplete}
+            onTransitionChange={setTransitionActive}
+          />
+        ) : (
+          <>
+            <Navbar />
+            <h1 className="text-white">Binary 2k26</h1>
+            <ScrollFlipCard />
+            <section className="h-screen bg-black flex items-center justify-center z-100">
+              <AboutSection />
+            </section>
+            <Tracks />
+            <Mentors />
+            <Timeline />
+            <Gallary />
+            <Footer />
+          </>
+        )}
+      </div>
     </>
   );
 }
