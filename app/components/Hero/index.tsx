@@ -34,24 +34,9 @@ const Hero = ({ heroTopRef }: { heroTopRef: (node?: Element | null | undefined) 
       </a> */}
       <div id="hero" ref={heroTopRef} className="flex flex-col justify-center gap-8">
         <div className="mt-16 flex w-full flex-col items-center justify-center md:mt-0 md:text-[1.5rem]">
-          <motion.div
-            key="hero-logo"
-            className="mt-[15%] flex w-full flex-col items-center justify-center lg:mt-[10%]"
-            initial={{ opacity: 1, scale: 0 }}
-            animate={{ opacity: 1, scale: 0.8 }}
-            transition={{
-              duration: 0.3,
-              ease: [0, 0.71, 0.2, 1.01],
-              scale: {
-                type: 'spring',
-                damping: 5,
-                stiffness: 100,
-                restDelta: 0.001,
-              },
-            }}
-          >
+          <div className="mt-[15%] flex w-full flex-col items-center justify-center lg:mt-[10%]">
             <Image height={800} width={500} className="glitch opacity-[200]" src='/herologo.png' alt="Binary Hackathon" />
-          </motion.div>
+          </div>
         </div>
 
         <div className="mx-auto mt-16 flex flex-col gap-8 md:mt-0 md:flex-row">
