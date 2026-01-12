@@ -18,6 +18,12 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/autoplay";
+import { Pixelify_Sans } from "next/font/google";
+
+const pixelifySans = Pixelify_Sans({
+  variable: "--font-pixelify",
+  subsets: ["latin"],
+});
 
 interface MemberComponentProps {
   url: string;
@@ -72,81 +78,95 @@ const CommunityPartners = () => {
         </div>
 
         {isMobile ? (
-          <div className="mx-auto mt-20 md:mt-10">
-            <Swiper
-              modules={[Autoplay]}
-              autoplay={{
-                delay: 1500,
-                disableOnInteraction: true,
-                pauseOnMouseEnter: true,
-              }}
-              loop
-              slidesPerView={2} // default to show 2 slides during autoplay
-              slidesPerGroup={1} // move 1 slide each autoplay tick
-              spaceBetween={16}
-              className="ml-8 mr-8 flex items-center justify-center lg:ml-[4%] lg:mr-[4%]"
-              breakpoints={{
-                0: { slidesPerView: 2 }, // ensure 2 slides on smallest widths during autoplay
-                480: { slidesPerView: 2 },
-                900: { slidesPerView: 2 },
-                1100: { slidesPerView: 3 },
-                1400: { slidesPerView: 4 },
-              }}
-            >
-              {communityPartnersItems.map((item, index) => (
-                <SwiperSlide
-                  key={index}
-                  className="flex justify-center items-center"
-                >
-                  <MemberComponent url={item.url} imageUrl={item.imageUrl} />
-                </SwiperSlide>
-              ))}
-            </Swiper>
+          <div className="mx-auto mt-20 md:mt-10 relative">
+            <div className="absolute inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/60 rounded-3xl border border-white/10">
+              <p className={`text-4xl md:text-5xl font-bold text-white uppercase tracking-widest ${pixelifySans.className}`}>
+                Coming Soon!
+              </p>
+            </div>
+            <div className="filter blur-sm select-none pointer-events-none">
+              <Swiper
+                modules={[Autoplay]}
+                autoplay={{
+                  delay: 1500,
+                  disableOnInteraction: true,
+                  pauseOnMouseEnter: true,
+                }}
+                loop
+                slidesPerView={2} // default to show 2 slides during autoplay
+                slidesPerGroup={1} // move 1 slide each autoplay tick
+                spaceBetween={16}
+                className="ml-8 mr-8 flex items-center justify-center lg:ml-[4%] lg:mr-[4%]"
+                breakpoints={{
+                  0: { slidesPerView: 2 }, // ensure 2 slides on smallest widths during autoplay
+                  480: { slidesPerView: 2 },
+                  900: { slidesPerView: 2 },
+                  1100: { slidesPerView: 3 },
+                  1400: { slidesPerView: 4 },
+                }}
+              >
+                {communityPartnersItems.map((item, index) => (
+                  <SwiperSlide
+                    key={index}
+                    className="flex justify-center items-center"
+                  >
+                    <MemberComponent url={item.url} imageUrl={item.imageUrl} />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
           </div>
         ) : (
-          <div className="grid grid-cols-12 gap-6">
-            {communityPartnersItems.map((item, index) => {
-              const lastRow = communityPartnersItems.length % 4;
-              if (
-                lastRow === 0 ||
-                index < communityPartnersItems.length - lastRow
-              ) {
-                return (
-                  <span className="col-span-3" key={index}>
-                    <MemberComponent url={item.url} imageUrl={item.imageUrl} />
-                  </span>
-                );
-              } else if (index >= communityPartnersItems.length - lastRow) {
-                if (lastRow === 1) {
+          <div className="relative">
+            <div className="absolute inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/60 rounded-3xl border border-white/10">
+              <p className={`text-6xl font-bold text-white uppercase tracking-widest ${pixelifySans.className}`}>
+                Coming Soon!
+              </p>
+            </div>
+            <div className="grid grid-cols-12 gap-6 filter blur-sm select-none pointer-events-none">
+              {communityPartnersItems.map((item, index) => {
+                const lastRow = communityPartnersItems.length % 4;
+                if (
+                  lastRow === 0 ||
+                  index < communityPartnersItems.length - lastRow
+                ) {
                   return (
-                    <span className="col-span-12" key={index}>
-                      <MemberComponent
-                        url={item.url}
-                        imageUrl={item.imageUrl}
-                      />
+                    <span className="col-span-3" key={index}>
+                      <MemberComponent url={item.url} imageUrl={item.imageUrl} />
                     </span>
                   );
-                } else if (lastRow === 2) {
-                  return (
-                    <span className="col-span-6" key={index}>
-                      <MemberComponent
-                        url={item.url}
-                        imageUrl={item.imageUrl}
-                      />
-                    </span>
-                  );
-                } else if (lastRow === 3) {
-                  return (
-                    <span className="col-span-4" key={index}>
-                      <MemberComponent
-                        url={item.url}
-                        imageUrl={item.imageUrl}
-                      />
-                    </span>
-                  );
+                } else if (index >= communityPartnersItems.length - lastRow) {
+                  if (lastRow === 1) {
+                    return (
+                      <span className="col-span-12" key={index}>
+                        <MemberComponent
+                          url={item.url}
+                          imageUrl={item.imageUrl}
+                        />
+                      </span>
+                    );
+                  } else if (lastRow === 2) {
+                    return (
+                      <span className="col-span-6" key={index}>
+                        <MemberComponent
+                          url={item.url}
+                          imageUrl={item.imageUrl}
+                        />
+                      </span>
+                    );
+                  } else if (lastRow === 3) {
+                    return (
+                      <span className="col-span-4" key={index}>
+                        <MemberComponent
+                          url={item.url}
+                          imageUrl={item.imageUrl}
+                        />
+                      </span>
+                    );
+                  }
                 }
-              }
-            })}
+              })}
+            </div>
           </div>
         )}
       </Section>

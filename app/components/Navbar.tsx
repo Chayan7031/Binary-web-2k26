@@ -1,24 +1,35 @@
 "use client";
+
 import { useState, useEffect, useRef } from 'react';
 import { Menu, X } from 'lucide-react';
 import NextImage from "next/image";
 import { motion } from "framer-motion";
 import { HyperText } from './ui/hyper-text';
+import { useRouter, usePathname } from 'next/navigation';
+import { Pixelify_Sans } from 'next/font/google';
 
-const Navbar = () => {
+const pixelifySans = Pixelify_Sans({
+    subsets: ['latin'],
+    weight: ['400', '700'],
+    variable: '--font-pixelify-sans',
+});
+
+export default function Navbar() {
+    const router = useRouter();
+    const pathname = usePathname();
     const [isOpen, setIsOpen] = useState(false);
     const [activeSection, setActiveSection] = useState('');
 
 
     const navItems = [
-        { name: 'About', href: '#about' },
-        { name: 'Timeline', href: '#timeline' },
-        { name: 'Tracks', href: '#tracks' },
-        { name: 'Gallery', href: '#gallery' },
-        { name: 'Mentors', href: '#mentors' },
-        { name: 'Sponsors', href: '#sponsors' },
-        { name: 'Community', href: '#community-partners' },
-        { name: 'FAQs', href: '#faqs' },
+        { name: 'About', path: '#about' },
+        { name: 'Timeline', path: '#timeline' },
+        { name: 'Tracks', path: '#tracks' },
+        { name: 'Gallery', path: '#gallery' },
+        { name: 'Mentors', path: '#mentors' },
+        { name: 'Sponsors', path: '#sponsors' },
+        { name: 'Community', path: '#community-partners' },
+        { name: 'FAQs', path: '#faqs' },
     ];
 
     const [activeIndex, setActiveIndex] = useState(-1);
@@ -46,10 +57,10 @@ const Navbar = () => {
             }
 
             const entries = navItems.map(item => {
-                const el = document.querySelector(item.href);
+                const el = document.querySelector(item.path);
                 if (el) {
                     return {
-                        id: item.href,
+                        id: item.path,
                         offset: Math.abs(el.getBoundingClientRect().top - 100)
                     };
                 }
@@ -66,7 +77,7 @@ const Navbar = () => {
             if (closest.offset < window.innerHeight / 2) { // Only highlight if reasonably close/visible
                 setActiveSection(closest.id);
                 // Update active index based on the new active section
-                const newIndex = navItems.findIndex(item => item.href === closest.id);
+                const newIndex = navItems.findIndex(item => item.path === closest.id);
                 setActiveIndex(newIndex);
             }
 
@@ -81,11 +92,21 @@ const Navbar = () => {
         e.preventDefault();
         setIsOpen(false);
         const target = document.querySelector(href);
+
         if (target) {
-            if (window.lenis) {
-                window.lenis.scrollTo(target as HTMLElement);
+            const lenis = (window as any).lenis;
+            if (lenis && typeof lenis.scrollTo === 'function') {
+                lenis.scrollTo(target as HTMLElement);
             } else {
-                target.scrollIntoView({ behavior: 'smooth' });
+                // Fallback with offset for fixed header
+                const headerOffset = 80; // Adjust based on your navbar height
+                const elementPosition = target.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: "smooth"
+                });
             }
         }
     };
@@ -93,7 +114,7 @@ const Navbar = () => {
 
 
     return (
-        <nav className="fixed top-0 left-0 w-full z-50 bg-black/80 backdrop-blur-md border-b border-green-500/20 overflow-hidden">
+        <nav className="fixed top-0 left-0 w-full z-60 bg-black/80 backdrop-blur-md border-b border-green-500/20 overflow-hidden">
             {/* Desktop Scroll Progress Overlay */}
             {/* Desktop Scroll Progress Overlay */}
             <motion.div
@@ -133,26 +154,26 @@ const Navbar = () => {
                         </div>
                     </div>
                     <div className="hidden md:block">
-                        <div className="ml-10 flex items-center space-x-4">
+                        <div className={`ml-10 flex items-center space-x-4`}>
                             {navItems.map((item, index) => (
                                 <a
                                     key={item.name}
-                                    href={item.href}
-                                    onClick={(e) => handleNavClick(e, item.href)}
-                                    className={`px-3 py-2 rounded-md text-sm font-mono transition-all duration-300 flex items-center ${activeSection === item.href
+                                    href={item.path}
+                                    onClick={(e) => handleNavClick(e, item.path)}
+                                    className={`px-3 py-2 rounded-md text-lg font-mono transition-all duration-300 flex items-center cursor-pointer ${pixelifySans.className} ${activeSection === item.path
                                         ? "text-green-500"
                                         : "text-gray-300 hover:text-green-400"
                                         }`}
                                 >
-                                    {activeSection === item.href && (
-                                        <span className="w-2 h-2  bg-green-500 mr-2 animate-pulse" />
+                                    {activeSection === item.path && (
+                                        <span className="w-2 h-2  bg-green-500 mr-2" />
                                     )}
-                                    <HyperText
+                                    {/* <HyperText
                                         as="span"
                                         className="text-sm font-mono bg-transparent p-0"
-                                    >
+                                    > */}
                                         {item.name}
-                                    </HyperText>
+                                    {/* </HyperText> */}
                                 </a>
                             ))}
                         </div>
@@ -174,22 +195,22 @@ const Navbar = () => {
                         {navItems.map((item) => (
                             <a
                                 key={item.name}
-                                href={item.href}
-                                className={`block px-3 py-2 rounded-md text-base font-medium flex items-center ${activeSection === item.href
+                                href={item.path}
+                                onClick={(e) => handleNavClick(e, item.path)}
+                                className={`block px-3 py-2 rounded-md text-base font-medium flex items-center cursor-pointer ${pixelifySans.className} ${activeSection === item.path
                                     ? "text-green-500"
                                     : "text-gray-300 hover:text-green-400"
                                     }`}
-                                onClick={(e) => handleNavClick(e, item.href)}
                             >
-                                {activeSection === item.href && (
+                                {activeSection === item.path && (
                                     <span className="w-2 h-2 rounded-full bg-green-500 mr-2" />
                                 )}
-                                <HyperText
+                                {/* <HyperText
                                     as="span"
                                     className="text-base font-mono bg-transparent p-0"
-                                >
+                                > */}
                                     {item.name}
-                                </HyperText>
+                                {/* </HyperText> */}
                             </a>
                         ))}
                     </div>
@@ -199,4 +220,4 @@ const Navbar = () => {
     );
 };
 
-export default Navbar;
+

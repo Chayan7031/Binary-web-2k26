@@ -40,7 +40,7 @@ export default function RootLayout({
         <html lang="en">
             <body className={`${geistSans.variable} ${geistMono.variable} ${pressStart2P.variable} ${pixelify.variable} bg-black overflow-hidden`}>
                 <div className="relative z-10 w-full h-full">
-                    <div className={`scanline`} />
+                    {/* <div className={`scanline`} /> */}
                     <SmoothScroll>{children}</SmoothScroll>
                 </div>
             </body>

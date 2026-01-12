@@ -80,11 +80,11 @@ const Tracks = () => {
                                         height: "100%",
                                         display: "grid",
                                         placeItems: "center",
-                                        backgroundColor: "#111",
+                                        backgroundColor: track.color,
                                         padding: "1rem"
                                     }}
                                 >
-                                    <p className="text-center font-bold text-xl" style={{ color: track.color }}>
+                                    <p className="text-center font-bold text-xl text-black">
                                         {track.description}
                                     </p>
                                 </div>
